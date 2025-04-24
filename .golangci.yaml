@@ -1,0 +1,59 @@
+version: "2"
+run:
+  modules-download-mode: readonly
+  allow-parallel-runners: true
+linters:
+  enable:
+    - bodyclose
+    - errname
+    - gocritic
+    - gocyclo
+    - godot
+    - importas
+    - mirror
+    - misspell
+    - perfsprint
+    - protogetter
+    - staticcheck
+    - tagalign
+    - testifylint
+    - unconvert
+    - unparam
+    - wastedassign
+    - whitespace
+  settings:
+    gocyclo:
+      min-complexity: 58
+    godot:
+      scope: declarations
+      capital: true
+      period: true
+    govet:
+      disable:
+        - shadow
+        - fieldalignment
+      enable-all: true
+    perfsprint:
+      err-error: false
+      errorf: false
+    staticcheck:
+      checks:
+        - all
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/coding-challenge-skylink)
+        - localmodule
+    gofmt:
+      simplify: true

@@ -1,0 +1,1 @@
+A solution for https://www.thecoder.cafe/i/156630543/problem-description
