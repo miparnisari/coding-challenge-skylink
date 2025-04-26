@@ -10,41 +10,27 @@ func TestNewGraph(t *testing.T) {
 	g, err := NewGraph("../testdata/input.txt")
 	require.NoError(t, err)
 
-	t.Run("traits", func(t *testing.T) {
-		require.True(t, g.Traits().IsWeighted)
-		require.True(t, g.Traits().IsDirected)
-		require.False(t, g.Traits().PreventCycles)
-	})
-
 	t.Run("edges", func(t *testing.T) {
-		numEdges, err := g.Size()
-		require.NoError(t, err)
-		require.Equal(t, 55*2, numEdges)
+		numEdges := g.NumEdges()
+		require.Equal(t, 55, numEdges)
 	})
 
 	t.Run("vertices", func(t *testing.T) {
-		numVertices, err := g.Order()
-		require.NoError(t, err)
+		numVertices := g.NumVertices()
 		require.Equal(t, 29, numVertices)
 	})
 
 	t.Run("start_node", func(t *testing.T) {
-		require.Equal(t, "A0", g.start)
+		require.Equal(t, "A0", g.Source.Id)
 	})
 
 	t.Run("end_nodes", func(t *testing.T) {
 		expected := []string{"A24", "A15", "A21", "A10", "A28"}
-		require.ElementsMatch(t, expected, g.ends)
-	})
-
-	t.Run("capacities", func(t *testing.T) {
-		edgeId := NewEdgeId("A22", "A13")
-		require.Equal(t, 19, g.capacitiesOfEdges[edgeId])
-	})
-
-	t.Run("capacities", func(t *testing.T) {
-		edgeId := NewEdgeId("A22", "A13")
-		require.Equal(t, 0, g.flowsOfEdges[edgeId])
+		actual := make([]string, len(g.Sinks))
+		for i, sink := range g.Sinks {
+			actual[i] = sink.Id
+		}
+		require.ElementsMatch(t, expected, actual)
 	})
 }
 
@@ -74,6 +60,12 @@ func TestMaxFlow(t *testing.T) {
 		maxFlow, err := g.MaxFlowToMultipleSinks()
 		require.NoError(t, err)
 		require.Equal(t, 5, maxFlow)
+	})
+
+	t.Run("duplicate_edge_not_allowed", func(t *testing.T) {
+		_, err := NewGraph("../testdata/dup_edge.txt")
+		require.ErrorIs(t, err, ErrEdgeExists)
+
 	})
 
 }

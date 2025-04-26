@@ -3,9 +3,7 @@ package main
 import (
 	"coding-challenge-skylink/pkg"
 	"fmt"
-	"github.com/dominikbraun/graph/draw"
 	"log"
-	"os"
 )
 
 func main() {
@@ -13,8 +11,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	file, _ := os.Create("./mygraph.gv")
-	_ = draw.DOT(g.Graph, file)
+
+	for _, sink := range g.Sinks {
+		pathExists := g.BFS(*g.Source, *sink, nil)
+		if !pathExists {
+			log.Fatalf("no path from source %s to sink %s", g.Source.Id, sink.Id)
+		}
+	}
 	maxFlow, err := g.MaxFlowToMultipleSinks()
 	if err != nil {
 		log.Fatal(err)

@@ -2,10 +2,7 @@ module coding-challenge-skylink
 
 go 1.24.2
 
-require (
-	github.com/dominikbraun/graph v0.23.0
-	github.com/stretchr/testify v1.10.0
-)
+require github.com/stretchr/testify v1.10.0
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
